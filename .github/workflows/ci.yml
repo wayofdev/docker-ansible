@@ -14,6 +14,7 @@ jobs:
   build-builder:
     name: Build Builder
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     strategy:
       fail-fast: false
       matrix:
@@ -43,8 +44,6 @@ jobs:
           tags: |
             type=raw,event=branch,value=latest
             type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
           flavor: |
             latest=false
             prefix=${{ matrix.build_type }}-${{ matrix.os_version }}-
@@ -65,11 +64,6 @@ jobs:
           cache-from: type=registry,ref=${{ env.IMAGE_TAG }}
           cache-to: type=inline
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Test Docker Release Image
-        if: success() && startsWith(github.ref, 'refs/tags/')
-        run: |
-          IMAGE_TAG=${{ env.IMAGE_NAMESPACE }}:${{ env.TEMPLATE }}-${{ env.VERSION }} make test
 
       - name: Test Docker Master Image
         if: success() && ! startsWith(github.ref, 'refs/tags/')
