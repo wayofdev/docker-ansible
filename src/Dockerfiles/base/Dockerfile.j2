@@ -43,6 +43,15 @@ RUN set -eux; \
         bash \
         jq \
     && ln -sf /usr/bin/python3 /usr/bin/python \
+	&& ln -sf ansible /usr/bin/ansible-config \
+	&& ln -sf ansible /usr/bin/ansible-console \
+	&& ln -sf ansible /usr/bin/ansible-doc \
+	&& ln -sf ansible /usr/bin/ansible-galaxy \
+	&& ln -sf ansible /usr/bin/ansible-inventory \
+	&& ln -sf ansible /usr/bin/ansible-playbook \
+	&& ln -sf ansible /usr/bin/ansible-pull \
+	&& ln -sf ansible /usr/bin/ansible-test \
+	&& ln -sf ansible /usr/bin/ansible-vault \
     # Clean up some space
 	&& find /usr/lib/ -name '__pycache__' -print0 | xargs -0 -n1 rm -rf \
 	&& find /usr/lib/ -name '*.pyc' -print0 | xargs -0 -n1 rm -rf
