@@ -1,0 +1,50 @@
+---
+
+- name: Load builder variables
+  include_vars:
+    file: group_vars/builder.yml
+    name: type
+  when: level == "builder"
+
+- name: Load base variables
+  include_vars:
+    file: group_vars/base.yml
+    name: type
+  when: level == "base"
+
+- name: Create dist directories
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: 0775
+    recurse: yes
+  with_items:
+    - "{{ tpl_directories }}"
+
+- name: Copy Configs
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
+    force: true
+    mode: 0644
+  with_items:
+    - "{{ tpl_configs }}"
+  when: level == "base"
+
+- name: Generate Dockerfiles
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
+    force: true
+    mode: 0644
+  with_items:
+    - "{{ tpl_dockerfiles }}"
+
+- name: Generate Dockerfile Goss tests
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
+    force: true
+    mode:  0644
+  with_items:
+    - "{{ tpl_docker_tests }}"

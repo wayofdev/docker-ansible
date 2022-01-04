@@ -1,0 +1,15 @@
+---
+
+builder:
+  hosts:
+    builder-alpine:
+      ansible_connection: local
+      level: builder
+      os_version: alpine
+
+base:
+  hosts:
+    base-alpine:
+      ansible_connection: local
+      level: base
+      os_version: alpine

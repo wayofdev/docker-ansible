@@ -1,0 +1,38 @@
+---
+
+# Ansible specific definitions
+########################################################################################################################
+edit_comment: "# Auto-generated via Ansible: edit src/Dockerfiles/builder/Dockerfile.j2 instead."
+
+
+
+# Dockerfile paths
+########################################################################################################################
+tpl_dockerfiles:
+  - src: Dockerfiles/builder/Dockerfile.j2
+    dst: "../dist/{{ level }}-{{ os_version }}/Dockerfile"
+
+
+
+# Dgoss tests
+########################################################################################################################
+tpl_docker_tests:
+  - src: Dockerfiles/builder/goss.yaml.j2
+    dst: "../dist/{{ level }}-{{ os_version }}/goss.yaml"
+
+
+# Builder variables
+########################################################################################################################
+alpine_version: "edge"
+
+pip_packages:
+  - Jinja2
+  - MarkupSafe
+  - PyNaCl
+  - bcrypt
+  - cffi
+  - cryptography
+  - pycparser
+  - ansible
+  - junit-xml
+  - lxml

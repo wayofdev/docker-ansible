@@ -1,0 +1,38 @@
+---
+
+# Ansible specific definitions
+########################################################################################################################
+edit_comment: "# Auto-generated via Ansible: edit src/Dockerfiles/base/Dockerfile.j2 instead."
+
+
+
+# Dockerfile paths
+########################################################################################################################
+tpl_dockerfiles:
+  - src: Dockerfiles/base/Dockerfile.j2
+    dst: "../dist/{{ level }}-{{ os_version }}/Dockerfile"
+
+
+# Additional configuration files
+########################################################################################################################
+tpl_configs:
+  # php.ini
+  - src: config/docker-entrypoint.sh
+    dst: "../dist/{{ level }}-{{ os_version }}/configs/docker-entrypoint.sh"
+
+
+# Dgoss tests
+########################################################################################################################
+tpl_docker_tests:
+  - src: Dockerfiles/base/goss.yaml.j2
+    dst: "../dist/{{ level }}-{{ os_version }}/goss.yaml"
+
+
+
+# Base variables
+########################################################################################################################
+alpine_version: "edge"
+os_user: "ansible"
+os_user_id: 1000
+os_group: "ansible"
+os_group_id: 1000

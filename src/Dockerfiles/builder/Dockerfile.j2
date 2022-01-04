@@ -1,0 +1,62 @@
+{{ edit_comment }}
+#
+# This is the "builder" Dockerfile from which all other images are created.
+# The Makefile builds the "builder" image first, before any of the "actual"
+# images are generated.
+
+FROM alpine:{{ alpine_version }} as builder
+
+# Labels
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md
+LABEL "maintainer"="lotyp <lotyp7@gmail.com>"
+LABEL "vendor"="wayofdev"
+LABEL "org.opencontainers.image.authors"="lotyp <lotyp7@gmail.com>"
+LABEL "org.opencontainers.image.url"="https://hub.docker.com/r/wayofdev/ansible-{{ level }}"
+LABEL "org.opencontainers.image.documentation"="https://github.com/wayofdev/docker-ansible"
+LABEL "org.opencontainers.image.source"="https://github.com/wayofdev/docker-ansible"
+LABEL "org.opencontainers.image.vendor"="wayofdev"
+LABEL "org.opencontainers.image.licenses"="MIT"
+LABEL "org.opencontainers.image.ref.name"="ansible-{{ level }}"
+LABEL "org.opencontainers.image.title"="ansible-{{ level }}"
+LABEL "org.opencontainers.image.description"="ansible-{{ level }}"
+
+ENV LANG="en_US.UTF-8"
+ENV LC_ALL="en_US.UTF-8"
+ENV LANGUAGE="en_US.UTF-8"
+
+RUN set -eux; \
+    apk -U upgrade -a \
+    # Adding builder packages
+    && apk add --update --no-cache \
+		curl \
+		git \
+		# Build Essentials
+		make \
+		g++ \
+		gcc \
+        musl-dev \
+        # Other Dependencies
+        cmake \
+		libffi-dev \
+		libxml2-dev \
+		libxslt-dev \
+		openssl-dev \
+        # Python
+		py3-pip \
+		python3 \
+		python3-dev \
+		py3-yaml \
+    # Wheel should be installed in separate step
+    && pip3 install --no-cache-dir --no-compile \
+        wheel \
+    # Adding pip packages
+    && pip3 install --no-cache-dir --no-compile \
+{% for package in pip_packages %}
+        {{ package }} \
+{% endfor %}
+    # Clean-up some site-packages to safe space
+	&& find /usr/lib/ -name '__pycache__' -print0 | xargs -0 -n1 rm -rf \
+	&& find /usr/lib/ -name '*.pyc' -print0 | xargs -0 -n1 rm -rf \
+    && pip3 uninstall --yes \
+		setuptools \
+		wheel

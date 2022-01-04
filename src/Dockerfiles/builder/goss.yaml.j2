@@ -1,0 +1,20 @@
+package:
+  curl:
+    installed: true
+  git:
+    installed: true
+  make:
+    installed: true
+command:
+  "python3 -c 'import _yaml'":
+    stderr:
+      - "!/ImportError: No module named _yaml/"
+    exit-status: 0
+  "ansible --version":
+    stdout:
+      - "libyaml = True"
+    exit-status: 0
+  "python3 --version":
+    stdout:
+      - "Python 3.10"
+    exit-status: 0
