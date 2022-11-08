@@ -21,7 +21,7 @@ jobs:
         build_type: ['builder']
         os_version: ['alpine']
     steps:
-      - uses: e1himself/goss-installation-action@v1.0.4
+      - uses: e1himself/goss-installation-action@v1.1.0
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -89,7 +89,7 @@ jobs:
         build_type: ['base']
         os_version: ['alpine']
     steps:
-      - uses: e1himself/goss-installation-action@v1.0.4
+      - uses: e1himself/goss-installation-action@v1.1.0
 
       - name: Checkout
         uses: actions/checkout@v2
